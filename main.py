@@ -13,6 +13,7 @@ class SqPainter(QWidget, Ui_Form):
         super().__init__()
         self.setupUi(self)
         self.pushButton.clicked.connect(self.paint)
+        self.points = []
         self.do_paint = False
 
     def paintEvent(self, event):
@@ -20,14 +21,18 @@ class SqPainter(QWidget, Ui_Form):
             qp = QPainter()
             qp.begin(self)
             size = self.size()
-            r = random.randint(10, 300)
+            d = random.randint(10, 300)
             w, h = self.width(), self.height()
-            x = random.randint(0, w - r)
-            y = random.randint(0, h - r - 50)
+            x = random.randint(0, w - d)
+            y = random.randint(0, h - d - 50)
             print(size)
-            qp.setBrush(QColor('yellow'))
-            qp.drawEllipse(QRect(x, y, 2 * r, 2 * r))
+            self.points.append((x, y, d))
+            for x, y, d in self.points:
+                color = random.randint(0, 0xffffff)
+                qp.setBrush(QColor(color))
+                qp.drawEllipse(QRect(x, y, d, d))
             qp.end()
+            self.do_paint = False
 
     def paint(self):
         self.do_paint = True
